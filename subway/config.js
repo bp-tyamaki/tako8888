@@ -11,17 +11,17 @@ var config = {
     use3dTerrain: false, //set true for enabling 3D maps.
     auto: false,
     title: 'Mind the Gap',
-    subtitle: 'Inside Neglected Areas in the NYC Subway',
+    subtitle: 'Neglected Areas in the NYC Subway',
     byline: 'By YAMAKI, Takayuki',
-    footer: 'Source: source citations, etc. <br> Created using <a href="https://github.com/mapbox/storytelling" target="_blank">Mapbox Storytelling</a> template.',
+    footer: 'Source: United States Census Bureau, New York State, and New York City. <br> Created using <a href="https://github.com/mapbox/storytelling" target="_blank">Mapbox Storytelling</a> template.<br> <a href="https://github.com/tako8888/project1_wheelchair?tab=readme-ov-file">Github<a>',
     chapters: [
         {
-            id: 'first-chapter',
+            id: 'zero-chapter-hidden',
             alignment: 'fully',
-            hidden: false,
-            title: 'less subway stations with elevators',
+            hidden: true,
+            title: '',
             // image: 'sorry.png',
-            description: 'If you need elevators, you will face difficulties in the NYC subway station',
+            description: '',
             location: {
                 center: [-74.04, 40.74],
                 zoom: 10,
@@ -35,8 +35,9 @@ var config = {
                 {
                     layer: 'mapbox-satellite',
                     opacity: 1,
-                    duration: 500
+                    duration: 10
                 },
+
                 {
                     layer: 'subwayStations',
                     opacity: 0,
@@ -61,10 +62,25 @@ var config = {
                 } ,
                 {
                     layer: 'clip_mask',
-                    opacity: 1,
-                    duration: 4000
+                    opacity: 0,
+                    duration: 1
                     
-                } 
+                } ,
+                {
+                    layer: 'neglected_area',
+                    opacity: 1,
+                    duration: 10
+                },
+                {
+                    layer: 'elevator_walk',
+                    opacity: 1,
+                    duration: 10
+                },            
+                {
+                    layer: 'clip_mask',
+                    opacity: 0.6,
+                    duration: 10
+                }
             ],
             onChapterExit: [
                 {
@@ -72,6 +88,74 @@ var config = {
                     opacity: 0,
                     duration: 1500
                 },
+                {
+                    layer: 'clip_mask',
+                    opacity: 0,
+                    duration: 1
+                    
+                } ,
+                {
+                    layer: 'neglected_area',
+                    opacity: 0,
+                    duration: 1000
+                },
+                {
+                    layer: 'elevator_walk',
+                    opacity: 0,
+                    duration: 1000
+                },            
+                {
+                    layer: 'clip_mask',
+                    opacity: 0,
+                    duration: 1000
+                }
+            ]
+        },
+
+        {
+            id: 'first-chapter',
+            alignment: 'fully',
+            hidden: false,
+            title: '',
+            // image: 'sorry.png',
+            description: 'If You Need Elevators, You Will Face Difficulties in the NYC Subway System',
+            location: {
+                center: [-74.04, 40.74],
+                zoom: 10,
+                pitch: 0,
+                bearing: 0
+            },
+            mapAnimation: 'flyTo',
+            rotateAnimation: false,
+            callback: '',
+            onChapterEnter: [
+
+                {
+                    layer: 'subwayStations',
+                    opacity: 0,
+                    duration: 500
+                },
+                {
+                    layer: 'boroughsMB',
+                    opacity: 0,
+                    duration: 500
+                }  ,                              
+                {
+                    layer: 'color_layer1_conditional',
+                    opacity: 0,
+                    duration: 4000
+                    
+                } ,
+                {
+                    layer: 'color_layer2_conditional',
+                    opacity: 0,
+                    duration: 4000
+                    
+                } ,
+
+            ],
+            onChapterExit: [
+
                 {
                     layer: 'clip_mask',
                     opacity: 0,
@@ -86,7 +170,7 @@ var config = {
             hidden: false,
             title: 'This is New York City',
             // image: './path/to/image/source.png',
-            description: 'There are XX subway stations in 4 boroughs',
+            description: 'There are 496 subway stations in 4 boroughs, based on unique IDs each station has',
             location: {
                 center: [-74.04, 40.74],
                 zoom: 10,
@@ -117,9 +201,9 @@ var config = {
             id: 'third-identifier',
             alignment: 'left',
             hidden: false,
-            title: 'Only 1 of them are euqipped with elevators',
+            title: '2/3 of subway stations lack accessibility',
             // image: './path/to/image/source.png',
-            description: 'Copy these sections to add to your story.',
+            description: "Only 160 subway stations are 'fully accessible' under the Americans with Disabilities Act (ADA). Many other stations lack elevators.",
             location: {
                 center: [-74.04, 40.74],
                 zoom: 10,
@@ -148,8 +232,8 @@ var config = {
             id: 'fourth-chapter',
             alignment: 'fully',
             hidden: false,
-            title: 'How large are the areas where people face difficulties?',
-            description: "Let's Visualize it!",
+            title: 'How Large are the Areas Where People Face Difficulties?',
+            description: "",
             location: {
                 center: [-74.04, 40.74],
                 zoom: 10,
@@ -167,8 +251,8 @@ var config = {
             id: 'fifth-chapter',
             alignment: 'left',
             hidden: false,
-            title: 'There are 240 square km2 people can acess subway 10 min walk',
-            description: "",
+            title: '',
+            description: "There are 2,837.7 square kilometers where people can access the subway within a 10-minute walk.",
             location: {
                 center: [-74.04, 40.74],
                 zoom: 10,
@@ -200,8 +284,8 @@ var config = {
             id: 'sixth-chapter',
             alignment: 'left',
             hidden: false,
-            title: 'That will shrink with elevators, 300kim.',
-            description: "",
+            title: 'Accessible Areas Shrink by Half if Elevators Are Needed',
+            description: "Only 1,351.8 square kilometers are within a 10-minute walk of subway stations with elevators.",
             location: {
                 center: [-74.04, 40.74],
                 zoom: 10,
@@ -241,7 +325,7 @@ var config = {
             id: 'seventh-chapter',
             alignment: 'left',
             hidden: false,
-            title: 'What is happeneing these "neglected area, where people face difficulties only if they need elevators"?',
+            title: "What is Happening in These 'Neglected Areas' Where People Face Difficulties if They Need Elevators?",
             description: "",
             location: {
                 center: [-74.04, 40.74],
@@ -260,12 +344,12 @@ var config = {
                 },
                 {
                     layer: 'elevator_walk',
-                    opacity: 0,
+                    opacity: 1,
                     duration: 500
                 },            
                 {
                     layer: 'clip_mask',
-                    opacity: 1,
+                    opacity: 0.8,
                     duration: 500
                 }            
                         ],
@@ -276,8 +360,8 @@ var config = {
             id: 'eith-chapter',
             alignment: 'left',
             hidden: false,
-            title: 'This map shows where people with ambulatory ratio is high',
-            description: "Red is 20% quantile. Green is 20% quantile",
+            title: 'This map shows areas with a high proportion of people with mobility issues.',
+            description: "<ul><li>Orange areas indicate the top 20% with the most mobility issues.</li> <li>Blue areas indicate the bottom 20% with the least mobility issues.</li></ul>",
             location: {
                 center: [-74.04, 40.74],
                 zoom: 10,
@@ -317,9 +401,8 @@ var config = {
             id: 'nineth-chapter',
             alignment: 'left',
             hidden: false,
-            title: 'Broad areas are inside "neglected area"',
-            // add flourish image
-            description: "High demand deprived area for elevators is much large, compared to area with elevators. **it's n times large, n is following 16%** Low demand area for elevators is much large in ELEVATOR area, compared to DEPRIVED area with elevators. it's n times large, n is following **29%**",
+            title: "Broader areas fall within high-demand neglected areas.",
+            description: "High-demand neglected areas for elevators exceed accessible areas by more than 16%. <br><br>Low-demand neglected areas are 29% larger than accessible areas.",
             location: {
                 center: [-74.04, 40.74],
                 zoom: 10,
@@ -358,8 +441,8 @@ var config = {
             id: 'tenth-chapter',
             alignment: 'left',
             hidden: false,
-            title: 'This map shows where people with ambulatory ratio is high',
-            description: "Red is 20% quantile. Green is 20% quantile",
+            title: 'The map also suggests a relationship between neglect and high poverty.',
+            description: "<ul><li>Red areas represent where people below the poverty line make up 20% of the population.</li> <li>Blue areas represent where they make up 5%.</ul></li>",
             location: {
                 center: [-74.04, 40.74],
                 zoom: 10,
@@ -390,12 +473,12 @@ var config = {
             title: '',
             image: 'change_artboard.png',
             alt: 'Higher Poverty in Neglected Areas of Manhattan. Half of "neglected areas" are where more than 20% of people live below the poverty line',
-            description: "High demand deprived area for elevators is much large, compared to area with elevators. **it's n times large, n is following 16%** Low demand area for elevators is much large in ELEVATOR area, compared to DEPRIVED area with elevators. it's n times large, n is following **29%**",
+            description: "The lack of accessiblity may affect people below the poverty line.",
             location: {
-                center: [-74.04, 40.74],
-                zoom: 10,
-                pitch: 0,
-                bearing: 0
+                center: [-74.03593, 40.79207],
+                zoom: 10.3,
+                pitch: 1.50,
+                bearing: 0.00
             },
             mapAnimation: 'flyTo',
             rotateAnimation: false,
@@ -405,7 +488,7 @@ var config = {
                 {
                     layer: 'clip_mask',
                     opacity: 1,
-                    duration: 500
+                    duration: 1500
                 },
                 {
                     layer: 'mapbox-satellite',
@@ -425,8 +508,8 @@ var config = {
             showMarkers: true,
             alignment: 'left',
             hidden: false,
-            title: 'Even Columbia University"',
-            description: "High demand deprived area for elevators is much large, compared to area with elevators. **it's n times large, n is following 16%** Low demand area for elevators is much large in ELEVATOR area, compared to DEPRIVED area with elevators. it's n times large, n is following **29%**",
+            title: 'Columbia University Is Not an Exception',
+            description: "Even the 'Columbia University' station, within a one-minute walk, lacks an elevator.  <br><br>Currently, there are no subway stations that have elevators, within one-mile radius from the university.",
             location: {
                 center: [-73.96221, 40.80737],
                 zoom: 16.01,
