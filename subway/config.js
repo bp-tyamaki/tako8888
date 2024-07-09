@@ -344,7 +344,7 @@ var config = {
                 },
                 {
                     layer: 'elevator_walk',
-                    opacity: 1,
+                    opacity: 0.5,
                     duration: 500
                 },            
                 {
@@ -361,7 +361,7 @@ var config = {
             alignment: 'left',
             hidden: false,
             title: 'This map shows areas with a high proportion of people with mobility issues.',
-            description: "<ul><li>Orange areas indicate the top 20% with the most mobility issues.</li> <li>Blue areas indicate the bottom 20% with the least mobility issues.</li></ul>",
+            description: '<ul><li><span style="color: #FF8001;">Orange areas</span> indicate the top 20% with the most mobility issues.</li> <li><span style="color: #027FFF;">Blue areas</span> indicate the bottom 20% with the least mobility issues.</li></ul>',
             location: {
                 center: [-74.04, 40.74],
                 zoom: 10,
@@ -394,7 +394,9 @@ var config = {
                     
                 } 
                         ],
-            onChapterExit: []
+            onChapterExit: [
+              
+            ]
         },
 
         {
@@ -418,7 +420,19 @@ var config = {
                     layer: 'clip_mask',
                     opacity: 1,
                     duration: 500
-                }            
+                },  
+                {
+                    layer: 'color_layer1_conditional',
+                    opacity: 1,
+                    duration: 500
+                    
+                },            
+                {
+                    layer: 'color_layer2_conditional',
+                    opacity: 0,
+                    duration: 500
+                    
+                }
                         ],
             onChapterExit: [
                 {
@@ -442,7 +456,7 @@ var config = {
             alignment: 'left',
             hidden: false,
             title: 'The map also suggests a relationship between neglect and high poverty.',
-            description: "<ul><li>Red areas represent where people below the poverty line make up 20% of the population.</li> <li>Blue areas represent where they make up 5%.</ul></li>",
+            description: '<ul><li><span style="color: #ff0000;">Red areas</span> represent where people below the poverty line make up 20% of the population.</li> <li><span style="color: #00ffff;">Blue areas</span> represent where they make up 5%.</ul></li>',
             location: {
                 center: [-74.04, 40.74],
                 zoom: 10,
@@ -463,7 +477,11 @@ var config = {
                         ],
                     
                         
-            onChapterExit: []
+            onChapterExit: [
+
+
+
+            ]
         },
 
         {
@@ -484,10 +502,21 @@ var config = {
             rotateAnimation: false,
             callback: '',
             onChapterEnter: [
+                {
+                    layer: 'color_layer2_conditional',
+                    opacity: 1,
+                    duration: 3000
+                    
+                },
  
                 {
                     layer: 'clip_mask',
                     opacity: 1,
+                    duration: 1500
+                },
+                {
+                    layer: 'mask2',
+                    opacity: 0.9,
                     duration: 1500
                 },
                 {
@@ -497,6 +526,19 @@ var config = {
                 }            
                         ],
             onChapterExit: [
+                {
+                    layer: 'color_layer2_conditional',
+                    opacity: 1,
+                    duration: 3000
+                    
+                },
+
+                {
+                    layer: 'mask2',
+                    opacity: 0,
+                    duration: 1500
+                },
+
             ]
             
         }
@@ -509,7 +551,7 @@ var config = {
             alignment: 'left',
             hidden: false,
             title: 'Columbia University Is Not an Exception',
-            description: "Even the 'Columbia University' station, within a one-minute walk, lacks an elevator.  <br><br>Currently, there are no subway stations that have elevators, within one-mile radius from the university.",
+            description: "The 'Columbia University' station lacks an elevator. Currently, there are no subway stations accessible via elevators within a one-mile radius of the university. <br><br>They are constructing a new elevator at the '125th St' Station, which is 0.47 miles from the university. <br><br>However, from the '125th St' Station to Columbia University, you will need to climb an elevation of more than 100 feet.",
             location: {
                 center: [-73.96221, 40.80737],
                 zoom: 16.01,
@@ -520,13 +562,7 @@ var config = {
             rotateAnimation: true,
             callback: '',
             onChapterEnter: [
-                {
-                    layer: 'color_layer2_conditional',
-                    opacity: 0,
-                    duration: 3000
-                    
-                },                 
- 
+
                 {
                     layer: 'mapbox-satellite',
                     opacity: 1,
@@ -543,7 +579,13 @@ var config = {
                     duration: 1500
                 }
                         ],
-            onChapterExit: []
+            onChapterExit: [
+                {
+                    layer: 'mapbox-satellite',
+                    opacity: 0,
+                    duration: 500
+                }
+            ]
         }
 
 
