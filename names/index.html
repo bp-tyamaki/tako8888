@@ -1,0 +1,165 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Name map with D3</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <script>
+
+      document.addEventListener('DOMContentLoaded', function() {
+      
+          var width = 960, height = 600;  // Define the size of the SVG element
+      
+          // Make sure this selects the SVG correctly
+          var svg = d3.select("body").select("svg")
+                      .attr("width", width)
+                      .attr("height", height);
+      
+          var projection = d3.geoAlbersUsa()
+              .translate([width / 2, height / 2])  // Centers the map in your SVG
+              .scale(1000);  // Scales the map within your SVG
+      
+          var path = d3.geoPath()
+              .projection(projection);
+      
+          d3.json('./data/nameswithstates.geojson').then(function(data) {
+
+            var colorScale = d3.scaleSequential(d3.interpolateBlues)  
+              .domain([0.01, 0.03]);  // Replace dataArray with your actual data range
+
+              function updateMap(selectedName) {
+                var dataArray = data.features.map(function(d) { return d.properties[selectedName]; });
+                console.log(selectedName)
+                console.log(dataArray)
+                // colorScale.domain([d3.min(dataArray), d3.max(dataArray)]);  // Update the color scale domain
+              
+          
+              svg.selectAll("path")
+               .data(data.features)
+               .join("path")  // Updated to use the join method for better handling of data updates
+               .attr("d", path)
+               .attr("fill", function(d) { return colorScale(d.properties[selectedName]); })  // Apply color scale
+               .attr("stroke", "white");
+                            }
+              // Event listener for dropdown change
+              d3.select("#name-select").on("change", function() {
+                  var selectedName = d3.select(this).property("value");
+                  updateMap(selectedName);
+
+
+                  d3.select("#title-name").text(selectedName + " Map");
+              });
+        // Initial map rendering with the first name in the dropdown
+        updateMap(d3.select("#name-select").property("value"));
+
+        function getRandomName() {
+            var options = d3.select("#name-select").selectAll("option").nodes();
+            var randomOption = options[Math.floor(Math.random() * options.length)];
+            return randomOption.value;
+        }
+
+        function animateRandomNames() {
+    let changeCount = 0;
+    const maxChanges = 7;  // Number of changes before stopping
+
+    const intervalId = setInterval(function() {
+        if (changeCount >= maxChanges) {
+            clearInterval(intervalId);
+        } else {
+            var randomName = getRandomName();
+            d3.select("#name-select").property("value", randomName).dispatch("change");
+            changeCount++;
+        }
+    }, 1000);  // Change every 1 second, adjust as needed
+}
+
+// Start the animation
+animateRandomNames();
+
+// Add this code after defining the colorScale
+
+var legendWidth = 300, legendHeight = 20;
+
+// Append a group element for the legend
+var legend = svg.append("g")
+    .attr("transform", "translate(" + (width - legendWidth - 20) + "," + (height - legendHeight - 20) + ")");
+
+// Create a gradient for the legend
+var defs = svg.append("defs");
+var linearGradient = defs.append("linearGradient")
+    .attr("id", "linear-gradient");
+
+linearGradient.selectAll("stop")
+    .data(d3.range(0, 1.01, 0.01))
+    .enter().append("stop")
+    .attr("offset", function(d) { return d; })
+    .attr("stop-color", function(d) { return colorScale(d3.interpolate(0.01, 0.03)(d)); });
+
+// Append the rectangle and fill it with the gradient
+legend.append("rect")
+    .attr("width", legendWidth)
+    .attr("height", legendHeight)
+    .style("fill", "url(#linear-gradient)");
+
+// Append legend axis
+var legendScale = d3.scaleLinear()
+    .domain([0.01, 0.03])
+    .range([0, legendWidth]);
+
+var legendAxis = d3.axisBottom(legendScale)
+    .ticks(5)
+    .tickFormat(d3.format(".2%"));
+
+legend.append("g")
+    .attr("transform", "translate(0," + legendHeight + ")")
+    .call(legendAxis);
+
+        
+            svg.selectAll("path")
+          }).catch(function(error) {
+              console.log(error); // Log any error in case the file can't be loaded
+          });
+      
+      });
+      
+          </script>
+            </head>
+  <body>
+    <h1 id="title-name" style="text-align: center;">Noah Map</h1>
+    <p>You can change names from the list below!</p>
+
+    <select id="name-select">
+      <option value="Noah">Noah</option>
+      <option value="Olivia">Olivia</option>
+      <option value="Emma">Emma</option>
+      <option value="Charlotte">Charlotte</option>
+      <option value="Amelia">Amelia</option>
+      <option value="Sophia">Sophia</option>
+      <option value="Isabella">Isabella</option>
+      <option value="Ava">Ava</option>
+      <option value="Mia">Mia</option>
+      <option value="Evelyn">Evelyn</option>
+      <option value="Luna">Luna</option>
+      <option value="Liam">Liam</option>
+      <option value="Oliver">Oliver</option>
+      <option value="James">James</option>
+      <option value="Elijah">Elijah</option>
+      <option value="William">William</option>
+      <option value="Henry">Henry</option>
+      <option value="Lucas">Lucas</option>
+      <option value="Benjamin">Benjamin</option>
+      <option value="Theodore">Theodore</option>    
+    </select>
+
+    <div id="my-svg-chart"></div>
+    <svg width="960" height="600"></svg>
+
+    <p>This map shows which states have a high frequency of people with a given name. The percentages are calculated by taking the number of people with that name divided by the number of births in that state in 2022, divided by 2. The division by 2 assumes an approximately equal distribution of male and female births.    </p>
+
+    <p><em>Disclaimer</em>: I have heavily relied on ChatGPT to make this.</p>
+    <p>data from <a href = "https://www.ssa.gov/oact/babynames/limits.html">the Social Security Administration</a> and <a href="https://wonder.cdc.gov/controller/datarequest/D149;jsessionid=B0315D4AA7551A2B800943366B42#Notes">CDC</a></p>
+    <p><a href="https://github.com/tako8888/names">Github</a></p>
+
+  </body>
+</html>
